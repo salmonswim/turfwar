@@ -1,0 +1,13 @@
+#fishgame {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+#fishgrid {
+    display: grid;
+    width: 15em;
+    height: 10em;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+}
