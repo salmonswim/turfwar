@@ -1,4 +1,115 @@
-img {
-    margin-top: 3em;
-    display: block;
+/* licensed under the Open Font License: https://turfwar.ink/fonts/OFL_Bitcount.txt */
+@font-face {
+    font-family: 'Bitcount Single';
+    src: url(../fonts/BitcountSingle-Regular.ttf) format('truetype');
+}
+
+/* licensed under the Open Font License: https://turfwar.ink/fonts/OFL_Monaspace.txt */
+@font-face {
+    font-family: 'Monaspace Argon';
+    src: url(../fonts/Monaspace\ Argon\ Var.woff2) format('woff2'),
+         url(../fonts/Monaspace\ Argon\ Var.woff) format('woff');
+}
+@font-face {
+    font-family: 'Monaspace Xenon';
+    src: url(../fonts/Monaspace\ Xenon\ Var.woff2) format('woff2'),
+         url(../fonts/Monaspace\ Xenon\ Var.woff) format('woff');
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 300px;
+    grid-template-columns: auto 350px;
+    grid-template-areas: "title socials"
+                         "links socials";
+    gap: 1px;
+    overflow: hidden;
+}
+
+/* title */
+
+#titlediv {
+    grid-area: title;
+    background-color: black;
+    display: grid;
+    place-items: center;
+}
+
+h1 {
+    margin: 0;
+    color: white;
+    font-family: 'Bitcount Single', monospace;
+    font-weight: normal;
+    font-size: 5em;
+    user-select: none;
+}
+
+/* links */
+
+#linksdiv {
+    grid-area: links;
+    background-image: url("../images/crystal-bg.png");;
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+p.links {
+    margin: 0;
+    padding: auto;
+    background-color: #000000f0;
+    font-family: 'Monaspace Xenon', serif;
+    font-size: 1.2em;
+    text-align: center;
+    line-height: 150px;
+    user-select: none;
+    transition: background-color 1s;
+}
+
+p.links:hover {
+    background-color: #000000c0;
+    transition: background-color 0.1s;
+}
+
+a.links {
+    color: white;
+    text-decoration-color: transparent;
+    transition: text-decoration-color 0.3s;
+}
+
+a.links:hover {
+    text-decoration-color: white;
+}
+
+a.links.broken {
+    color: grey;
+}
+
+/* socials */
+
+#socialsdiv {
+    grid-area: socials;
+    background-color: black;
+}
+
+p.socials {
+    margin: 0;
+    text-align: right;
+    color: white;
+    font-family: 'Monaspace Argon', sans-serif;
+}
+
+p.socials::selection {
+    background-color: white;
+    color: black;
+}
+
+a.socials {
+    text-decoration: none;
+}
+
+a.socials:hover {
+    text-decoration: underline;
 }

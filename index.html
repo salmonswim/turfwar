@@ -1,31 +1,54 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>turfwar</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" sizes="32x32" href="images/favicons/favicon-32x32.png">
+        <link rel="icon" sizes="48x48" href="images/favicons/favicon-48x48.png">
+        <link rel="icon" sizes="64x64" href="images/favicons/favicon-64x64.png">
+        <link rel="icon" sizes="96x96" href="images/favicons/favicon-96x96.png">
         <link rel="stylesheet" href="styles/fish.css">
         <link rel="stylesheet" href="styles/index.css">
     </head>
     <body>
-        <!-- <h1>salmonswim website</h1> -->
-        <h3>salmonswim</h3>
-        <p id="discord">discord: <a href="#" onclick="copyDiscord()">salmonswim</a></p>
-        <a href="https://sendou.ink/u/salmonswim">sendou</a>
-        <img src="images/bee-doorbell-optimize.gif">
+        <!-- title -->
+            <!-- todo: make interactive -->
+        <div id="titlediv">
+            <h1>salmonswim</h1>
+        </div>
+        
+        <!-- website links -->
+        <div id="linksdiv">
+            <p class="links"><a class="links broken">...</a></p> <!-- games -->
+            <p class="links"><a class="links broken">...</a></p> <!-- about -->
+            <p class="links"><a class="links broken">...</a></p> <!-- posts -->
+            <p class="links"><a class="links broken">...</a></p> <!-- projects -->
+            <p class="links"><a class="links broken">...</a></p> <!-- ? -->
+            <p class="links"><a class="links" href="changelog.html">log</a></p>
+        </div>
 
-        <div id="fishgame">
-            <p id="fishscore"></p>
-            <div id="fishgrid"></div>
+        <!-- socials -->
+        <div id="socialsdiv" class="socials">
+            <p class="socials">
+                &nbsp;&nbsp;<br>
+                &nbsp;&nbsp;checked regularly&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<span style="color: #202020">(click to copy)</span>&nbsp;&nbsp;<a class="socials" style="color: #5865f2; cursor: pointer" onclick="navigator.clipboard.writeText('salmonswim');">discord</a>&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<br>
+                &nbsp;&nbsp;checked occasionally&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<a class="socials" style="color: #097afe" href="https://bsky.app/profile/salmonswim.bsky.social">bluesky</a>&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<a class="socials" style="color: #ff0069" href="https://bsky.app/profile/salmonswim.bsky.social">instagram</a>&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<br>
+                &nbsp;&nbsp;~&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<a class="socials" style="color: #b6bfb8" href="https://github.com/salmonswim">github</a>&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<a class="socials" style="color: #484685" href="https://sendou.ink/u/salmonswim">sendou.ink</a>&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<a class="socials" style="color: #ffc60c" href="https://www.speedrun.com/users/salmonswim">speedrun.com</a>&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<a class="socials" style="color: #1ed760" href="https://open.spotify.com/user/312a6uewfk2wxjq4cju3thqu6jha">spotify</a>&nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<a class="socials" style="color: #ff0033" href="https://www.youtube.com/@salmonswim">youtube</a>&nbsp;&nbsp;<br>
+            </p>
         </div>
         
         <script src="scripts/index.js" async defer></script>
-        <script src="scripts/fish.js" async defer></script>
     </body>
 </html>
