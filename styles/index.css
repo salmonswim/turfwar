@@ -46,6 +46,16 @@ h1 {
     user-select: none;
 }
 
+#canvas1 {
+    display: inline;
+    position: absolute;
+}
+
+#canvas2 {
+    display: none;
+    position: absolute;
+}
+
 /* links */
 
 #linksdiv {
