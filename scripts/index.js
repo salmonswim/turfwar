@@ -6,6 +6,7 @@ const canvas2 = document.getElementById("canvas2");
 const ctx1 = canvas1.getContext("2d");
 const ctx2 = canvas2.getContext("2d");
 const h1 = document.querySelector("h1");
+const discordcopy = document.getElementById("discordcopy");
 let dpr = window.devicePixelRatio;
 
 let bigStarfield;
@@ -21,22 +22,28 @@ let numSmallStars = Math.floor(titlediv.clientWidth * titlediv.clientHeight / 30
 initCanvas(numBigStars, numSmallStars, true);
 window.addEventListener("resize", function() {
     clearTimeout(timeout);
-    numBigStars = Math.floor(titlediv.clientWidth * titlediv.clientHeight / 80000);
-    numSmallStars = Math.floor(titlediv.clientWidth * titlediv.clientHeight / 6000);
-    timeout = setTimeout(initCanvas(numBigStars, numSmallStars, false), 50);
+    canvas1.style.display = "none";
+    canvas2.style.display = "none";
+    numBigStars = Math.floor(titlediv.clientWidth * titlediv.clientHeight / 40000);
+    numSmallStars = Math.floor(titlediv.clientWidth * titlediv.clientHeight / 3000);
+    initCanvas(numBigStars, numSmallStars, false);
+    timeout = setTimeout(function() {
+        if (fieldn == 1) canvas1.style.display = "inline";
+        else canvas2.style.display = "inline";
+    }, 100);
 });
 
 updateBackgroundGradient(0.5, 0.5);
 titlediv.addEventListener("mousemove", function(e) {
-    updateBackgroundGradient(e.screenX / titlediv.clientWidth, e.screenY / titlediv.clientHeight);
+    updateBackgroundGradient(e.clientX / titlediv.clientWidth, e.clientY / titlediv.clientHeight);
 });
 
 // change titlediv gradient 
 function updateBackgroundGradient(xPercent, yPercent) {
-    const centerXPercent = 40 + 40 * xPercent;
+    const centerXPercent = 40 + 20 * xPercent;
     const centerYPercent = 150 + 100 * yPercent;
-    const centerColor = "#1c1222";
-    const edgeColor = "#020a1a";
+    const centerColor = "#191520";
+    const edgeColor = "#0b0e1a";
     titlediv.style.backgroundImage = `radial-gradient(
         circle farthest-side at ${centerXPercent}% ${centerYPercent}%,
         ${centerColor},
@@ -49,8 +56,6 @@ function updateBackgroundGradient(xPercent, yPercent) {
 function initCanvas(bigStars, numStars, firstCall) {
     ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
     ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-    canvas1.style.display = "none";
-    canvas2.style.display = "none";
 
     dpr = window.devicePixelRatio;
     canvas1.width = titlediv.clientWidth * dpr;
@@ -174,4 +179,15 @@ function createStar(x, y, r) {
     star.arc(x + r, y + r, r, Math.PI, 3 * Math.PI / 2);
     star.arc(x + r, y - r, r, Math.PI / 2, Math.PI);
     return star;
+}
+
+// highlights text when clicking discord link
+function discordCopy() {
+    navigator.clipboard.writeText('salmonswim');
+    discordcopy.style.transition = "none";
+    discordcopy.style.color = "#404040";
+    setTimeout(function() {
+        discordcopy.style.transition = "color 1s";
+        discordcopy.style.color = "#202020";
+    }, 250);
 }

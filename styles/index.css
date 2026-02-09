@@ -123,3 +123,7 @@ a.socials {
 a.socials:hover {
     text-decoration: underline;
 }
+
+#discordcopy {
+    color: #202020;
+}
