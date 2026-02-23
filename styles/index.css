@@ -56,6 +56,10 @@ h1 {
     position: absolute;
 }
 
+#canvasphys {
+    position: absolute;
+}
+
 /* links */
 
 #linksdiv {
