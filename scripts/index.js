@@ -1,4 +1,6 @@
-// some code taken from https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#scaling_for_high_resolution_displays
+/* 
+    some code taken from https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#scaling_for_high_resolution_displays
+*/
 
 const titlediv = document.getElementById("titlediv");
 const canvas1 = document.getElementById("canvas1");
@@ -7,7 +9,7 @@ const ctx1 = canvas1.getContext("2d");
 const ctx2 = canvas2.getContext("2d");
 const h1 = document.querySelector("h1");
 const discordcopy = document.getElementById("discordcopy");
-let dpr = window.devicePixelRatio;
+let dpr = window.devicePixelRatio || 1;
 
 let bigStarfield;
 let starfield1;
