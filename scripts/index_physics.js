@@ -35,7 +35,8 @@ const render = Render.create({
 });
 const runner = Runner.create();
 
-const walls = []; // defined outside to use on resize later
+let rectangle; // defined outside to use on resize later
+const walls = [];
 let posX = [canvasphys.width / 2, canvasphys.width / 2, -100, canvasphys.width + 100];
 let posY = [-100, canvasphys.height + 100, canvasphys.height / 2, canvasphys.height / 2];
 let sizeX = [canvasphys.width * 2, canvasphys.width * 2, 200, 200];
@@ -63,7 +64,7 @@ document.fonts.ready.then(function() { // note: everything needs to happen after
 
     const scaleFactor = h1.clientWidth / texture.width;
 
-    const rectangle = Bodies.rectangle(
+    rectangle = Bodies.rectangle(
         (canvasphys.width / 2) - (1 * dpr), (canvasphys.height / 2) - (7 * dpr), // position
         texture.width * scaleFactor * dpr, texture.height * scaleFactor * dpr, // size 
         {
@@ -114,6 +115,13 @@ function enable_phys() {
     h1.style.display = "none";
     Render.run(render);
     Runner.run(runner, engine);
+    if (canvasphys.width != titlediv.clientWidth * dpr || canvasphys.height != titlediv.clientHeight * dpr) {
+        resize_phys();
+        Body.setPosition(rectangle, {
+            x: (canvasphys.width / 2) - (1 * dpr), 
+            y: (canvasphys.height / 2) - (7 * dpr)
+        });
+    }
     window.addEventListener("resize", resize_phys);
 }
 

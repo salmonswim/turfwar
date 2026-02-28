@@ -3,10 +3,14 @@
 */
 
 const titlediv = document.getElementById("titlediv");
+const socialsdiv = document.getElementById("socialsdiv");
+const socialslinks = document.querySelectorAll("a.socials")
 const canvas1 = document.getElementById("canvas1");
 const canvas2 = document.getElementById("canvas2");
+const canvasbubble = document.getElementById("canvasbubble");
 const ctx1 = canvas1.getContext("2d");
 const ctx2 = canvas2.getContext("2d");
+const ctxbubble = canvasbubble.getContext("2d");
 const h1 = document.querySelector("h1");
 const discordcopy = document.getElementById("discordcopy");
 let dpr = window.devicePixelRatio || 1;
@@ -35,10 +39,22 @@ window.addEventListener("resize", function() {
     }, 100);
 });
 
+let bubbles = [];
+for (const link of socialslinks) {
+    link.addEventListener("mouseenter", function() {
+        for (let i = 0; i < 8; i++) {
+            const [x, y, r] = randomBubble(2, 1);
+            bubbles.push([x, y, r, 0]);
+        }
+    });
+}
+
 updateBackgroundGradient(0.5, 0.5);
 titlediv.addEventListener("mousemove", function(e) {
     updateBackgroundGradient(e.clientX / titlediv.clientWidth, e.clientY / titlediv.clientHeight);
 });
+
+/******************** functions for title ********************/
 
 // change titlediv gradient 
 function updateBackgroundGradient(xPercent, yPercent) {
@@ -54,7 +70,100 @@ function updateBackgroundGradient(xPercent, yPercent) {
     )`;
 }
 
-// initialize canvas
+// returns random x, y, r values given padding (distance from borders) and base radius +- variability 
+function randomStar(padding, baseRadius, radiusVariability) {
+    const x = padding + Math.floor(Math.random() * (titlediv.clientWidth - padding * 2));
+    const y = padding + Math.floor(Math.random() * (titlediv.clientHeight - padding * 2));
+    const r = baseRadius - radiusVariability + Math.floor(Math.random() * (2 * radiusVariability + 1));
+    return [x, y, r];
+}
+
+// returns false if star values overlap stars in starList or h1 + margin, returns true otherwise
+function validStar(starList, starValues, margin) {
+    const centerX = titlediv.clientWidth / 2;
+    const centerY = titlediv.clientHeight / 2;
+    const [starX, starY, r] = starValues;
+    if (centerX - (h1.clientWidth / 2) - margin <= starX && starX <= centerX + (h1.clientWidth / 2) + margin &&
+        centerY - (h1.clientHeight / 2) - margin <= starY && starY <= centerY + (h1.clientHeight / 2) + margin) return false; // check h1
+    for (let i = 0; i < starList.length; i++) {
+        let [listX, listY, listR] = starList[i];
+        if (listX - listR - (r * 2) <= starX && starX <= listX + listR + (r * 2) &&
+            listY - listR - (r * 2) <= starY && starY <= listY + listR + (r * 2)) return false; // check starList
+    }
+    return true;
+}
+
+// returns one star Path2D object at coordinates x, y with arc radius r
+function createBigStar(x, y, r) {
+    const bigStar = new Path2D;
+    let theta = 2 * Math.PI * Math.random();
+    bigStar.moveTo(x + (r * Math.cos(theta)), y + (r * Math.sin(theta)));
+    for (let i = 0; i < 5; i++) {
+        theta += Math.PI * 4 / 5;
+        bigStar.lineTo(x + (r * Math.cos(theta)), y + (r * Math.sin(theta)));
+    }
+    return bigStar;
+}
+
+// returns one star Path2D object at coordinates x, y with arc radius r
+function createStar(x, y, r) {
+    const star = new Path2D;
+    star.arc(x - r, y - r, r, 0, Math.PI / 2);
+    star.arc(x - r, y + r, r, 3 * Math.PI / 2, 2 * Math.PI);
+    star.arc(x + r, y + r, r, Math.PI, 3 * Math.PI / 2);
+    star.arc(x + r, y - r, r, Math.PI / 2, Math.PI);
+    return star;
+}
+
+/******************** functions for socials ********************/
+
+// highlights text when clicking discord link
+function discordCopy() {
+    navigator.clipboard.writeText('salmonswim');
+    discordcopy.style.transition = "none";
+    discordcopy.style.color = "#404040";
+    setTimeout(function() {
+        discordcopy.style.transition = "color 1s";
+        discordcopy.style.color = "#202020";
+    }, 250);
+}
+
+// returns random x, y, r values given base radius +- variability 
+function randomBubble(baseRadius, radiusVariability) {
+    const x = 10 + Math.floor(Math.random() * (socialsdiv.clientWidth - 10 * 2));
+    const y = socialsdiv.clientHeight + 5 + Math.floor(Math.random() * 200);
+    const r = baseRadius - radiusVariability + Math.floor(Math.random() * (2 * radiusVariability + 1));
+    return [x, y, r];
+}
+
+// draws bubbles to canvas and updates position / velocity
+function drawBubbles() { 
+    ctxbubble.clearRect(0, 0, canvasbubble.width, canvasbubble.height);
+    let i = 0;
+    while (i < bubbles.length) {
+        let [x, y, r, v] = bubbles[i];
+        console.log(y);
+        ctxbubble.beginPath();
+        ctxbubble.arc(x, y, r, 0, 2 * Math.PI);
+        ctxbubble.lineWidth = 1;
+        ctxbubble.strokeStyle = `rgb(255 255 255 / ${100 * (y / socialsdiv.clientHeight)}%)`;
+        ctxbubble.stroke();
+
+        //x += -0.5 + Math.random();
+        v += 0.3 * Math.random();
+        y -= v;
+        if (y > -5) {
+            bubbles[i] = [x, y, r, v];
+            i++;
+        } else {
+            bubbles.splice(i, 1);
+        }
+    }
+}
+
+/******************** global functions ********************/
+
+// initialize canvases
 function initCanvas(bigStars, numStars, firstCall) {
     ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
     ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
@@ -62,14 +171,19 @@ function initCanvas(bigStars, numStars, firstCall) {
     dpr = window.devicePixelRatio;
     canvas1.width = titlediv.clientWidth * dpr;
     canvas2.width = titlediv.clientWidth * dpr;
+    canvasbubble.width = socialsdiv.clientWidth * dpr;
     canvas1.height = titlediv.clientHeight * dpr;
     canvas2.height = titlediv.clientHeight * dpr;
+    canvasbubble.height = socialsdiv.clientHeight * dpr;
     ctx1.scale(dpr, dpr);
     ctx2.scale(dpr, dpr);
+    ctxbubble.scale(dpr, dpr);
     canvas1.style.width = `${titlediv.clientWidth}px`;
     canvas1.style.height = `${titlediv.clientHeight}px`;
     canvas2.style.width = `${titlediv.clientWidth}px`;
     canvas2.style.height = `${titlediv.clientHeight}px`;
+    canvasbubble.style.width = `${socialsdiv.clientWidth}px`;
+    canvasbubble.style.height = `${socialsdiv.clientHeight}px`;
 
     bigStarfield = [];
     starfield1 = [];
@@ -118,7 +232,7 @@ function initCanvas(bigStars, numStars, firstCall) {
     if (firstCall) requestAnimationFrame(animate);
 }
 
-// animate by switching between starfields 1 and 2
+// animate everything
 function animate(timestamp) {
     if (!prevRenderTime) prevRenderTime = timestamp - (120000.0 / 130.0);
 
@@ -135,61 +249,9 @@ function animate(timestamp) {
             prevRenderTime = timestamp;
         }
     }
+
+    if (bubbles.length > 0) drawBubbles();
+    else ctxbubble.clearRect(0, 0, canvasbubble.width, canvasbubble.height);
+
     requestAnimationFrame(animate);
-}
-
-// returns random x, y, r values given padding (distance from borders) and base radius +- variability 
-function randomStar(padding, baseRadius, radiusVariability) {
-    const x = padding + Math.floor(Math.random() * (titlediv.clientWidth - padding * 2));
-    const y = padding + Math.floor(Math.random() * (titlediv.clientHeight - padding * 2));
-    const r = baseRadius - radiusVariability + Math.floor(Math.random() * (2 * radiusVariability + 1));
-    return [x, y, r];
-}
-
-// returns false if star values overlap stars in starList or h1 + margin, returns true otherwise
-function validStar(starList, starValues, margin) {
-    const centerX = titlediv.clientWidth / 2;
-    const centerY = titlediv.clientHeight / 2;
-    const [starX, starY, r] = starValues;
-    if (centerX - (h1.clientWidth / 2) - margin <= starX && starX <= centerX + (h1.clientWidth / 2) + margin &&
-        centerY - (h1.clientHeight / 2) - margin <= starY && starY <= centerY + (h1.clientHeight / 2) + margin) return false; // check h1
-    for (let i = 0; i < starList.length; i++) {
-        let [listX, listY, listR] = starList[i];
-        if (listX - listR - (r * 2) <= starX && starX <= listX + listR + (r * 2) &&
-            listY - listR - (r * 2) <= starY && starY <= listY + listR + (r * 2)) return false; // check starList
-    }
-    return true;
-}
-
-// returns one star Path2D object at coordinates x, y with arc radius r
-function createBigStar(x, y, r) {
-    const bigStar = new Path2D;
-    let theta = 2 * Math.PI * Math.random();
-    bigStar.moveTo(x + (r * Math.cos(theta)), y + (r * Math.sin(theta)));
-    for (let i = 0; i < 5; i++) {
-        theta += Math.PI * 4 / 5;
-        bigStar.lineTo(x + (r * Math.cos(theta)), y + (r * Math.sin(theta)));
-    }
-    return bigStar;
-}
-
-// returns one star Path2D object at coordinates x, y with arc radius r
-function createStar(x, y, r) {
-    const star = new Path2D;
-    star.arc(x - r, y - r, r, 0, Math.PI / 2);
-    star.arc(x - r, y + r, r, 3 * Math.PI / 2, 2 * Math.PI);
-    star.arc(x + r, y + r, r, Math.PI, 3 * Math.PI / 2);
-    star.arc(x + r, y - r, r, Math.PI / 2, Math.PI);
-    return star;
-}
-
-// highlights text when clicking discord link
-function discordCopy() {
-    navigator.clipboard.writeText('salmonswim');
-    discordcopy.style.transition = "none";
-    discordcopy.style.color = "#404040";
-    setTimeout(function() {
-        discordcopy.style.transition = "color 1s";
-        discordcopy.style.color = "#202020";
-    }, 250);
 }

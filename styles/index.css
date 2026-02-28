@@ -114,6 +114,7 @@ p.socials {
     text-align: right;
     color: white;
     font-family: 'Monaspace Argon', sans-serif;
+    z-index: 1;
 }
 
 p.socials::selection {
@@ -131,4 +132,9 @@ a.socials:hover {
 
 #discordcopy {
     color: #202020;
+}
+
+#canvasbubble {
+    position: absolute;
+    pointer-events: none;
 }
